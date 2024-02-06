@@ -10,10 +10,27 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.8",
+    "@emotion/react": "^11.11.3",
+    "@graphql-codegen/client-preset": "^4.1.0",
+    "@mantine/core": "^6.0.19",
+    "@mantine/dropzone": "^6.0.19",
+    "@mantine/form": "^6.0.19",
+    "@mantine/hooks": "^6.0.19",
+    "@mantine/modals": "^6.0.19",
+    "@parcel/watcher": "^2.3.0",
+    "@tabler/icons-react": "^2.45.0",
+    "apollo-upload-client": "^17.0.0",
+    "graphql": "^16.8.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.1",
+    "subscriptions-transport-ws": "^0.11.0",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@types/apollo-upload-client": "^17.0.2",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
@@ -22,7 +39,8 @@
     "eslint": "^8.55.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
-    "typescript": "^5.2.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3",
     "vite": "^5.0.8"
   }
 }

@@ -18,8 +18,8 @@ model User {
   password  String
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  chatrooms Chatroom[] @relation("ChatRommUser")
-  messages  Message[]
+  chatrooms Chatroom[] @relation("ChatRommUser") // one-to-many
+  messages  Message[] // one-to-many
 }
 
 model Chatroom {
@@ -27,8 +27,8 @@ model Chatroom {
   name      String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  users     User[]    @relation("ChatRommUser")
-  messages  Message[]
+  users     User[]    @relation("ChatRommUser") // one-to-many
+  messages  Message[] // one-to-many
 }
 
 model Message {
@@ -37,8 +37,8 @@ model Message {
   imageUrl   String?
   userId     Int
   chatroomId Int
-  createdAt  DateTime
+  createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  chatroom   Chatroom @relation(fields: [chatroomId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade) // many-to-one
+  chatroom   Chatroom @relation(fields: [chatroomId], references: [id], onDelete: Cascade) // many-to-one
 }

@@ -1,21 +1,25 @@
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { LoginResponse, RegisterResponse } from './types';
-import { LoginDto, RegisterDto } from 'src/user/dto';
-import { BadRequestException } from '@nestjs/common';
+import { LoginDto, RegisterDto } from 'src/auth/dto';
+import { BadRequestException, UseFilters } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { GraphQLErrorFilter } from 'src/filters/custom-exception-filter';
 
 @Resolver()
 export class AuthResolver {
     constructor(
         private authService: AuthService
     ){}
-
+    
+    @UseFilters(GraphQLErrorFilter)
     @Mutation(() => RegisterResponse)
     async register(@Args("registerInput") registerDto: RegisterDto, @Context() context: {res: Response}) {
+        console.log(`Inside the regsiter resolver ${registerDto}`);
         if(registerDto.confirmPassword !== registerDto.password) throw new BadRequestException({confirmPassword: "Password and confirm password must be same"});
 
-        return await this.authService.registerUser(registerDto, context.res)
+        const {user} =  await this.authService.registerUser(registerDto, context.res)
+        return {user};
     }
 
     @Mutation(() => LoginResponse)

@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {Request, Response} from 'express'
 import { User } from '@prisma/client';
-import { LoginDto, RegisterDto } from 'src/user/dto';
+import { LoginDto, RegisterDto } from 'src/auth/dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class AuthService {
     ) {}
 
     async refreshToken(req:Request, res:Response) {
-        const refresh_token = req.cookies("refresh_token");
+        const refresh_token = req.cookies?.refresh_token;
 
         if(!refresh_token) throw new UnauthorizedException("Refresh token not found");
 

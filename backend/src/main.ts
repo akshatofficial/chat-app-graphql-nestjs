@@ -7,7 +7,7 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:5173",
     credentials: true,
     allowedHeaders: [
       'Accept',
@@ -25,7 +25,8 @@ async function bootstrap() {
     whitelist: true,
     transform: true,
     exceptionFactory: (errors) => { const completeError = errors.reduce((acc, err) => {
-      acc[err.property] = Object.values(err).join(',')
+      acc[err.property] = Object.values(err.constraints).join(',')
+      //Here above err.constraints is very much important as earlier I was just writing err and hence getting something like "[object Object],test,password,,[object Object] " in the client side.
       return acc;
     }, {}) 
 
