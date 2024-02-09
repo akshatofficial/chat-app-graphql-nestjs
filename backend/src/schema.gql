@@ -44,6 +44,8 @@ type Mutation {
   refreshToken: String!
   register(registerInput: RegisterDto!): RegisterResponse!
   updateUserProfile(avatarFile: Upload, fullname: String!): User!
+  userStartedTypingMutation(chatroomId: Float!): User!
+  userStoppedTypingMutation(chatroomId: Float!): User!
 }
 
 type Query {
@@ -62,6 +64,12 @@ input RegisterDto {
 
 type RegisterResponse {
   user: User
+}
+
+type Subscription {
+  newMessage(chatroomId: Float!): Message
+  userStartedTyping(chatroomId: Float!, userId: Float!): User
+  userStoppedTyping(chatroomId: Float!, userId: Float!): User
 }
 
 """The `Upload` scalar type represents a file upload."""

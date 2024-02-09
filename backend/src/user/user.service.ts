@@ -61,4 +61,12 @@ export class UserService {
             }
         })
     }
+
+    async getUser(userId: number) {
+        return this.prismaService.user.findUnique({
+          where: {
+            id: userId,
+          },
+        });
+      }
 }
