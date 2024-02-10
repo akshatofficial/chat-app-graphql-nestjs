@@ -9,6 +9,7 @@ import { GraphQLErrorFilter } from 'src/filters/custom-exception-filter';
 import { Chatroom, Message } from './chatroom.types';
 import {PubSub} from 'graphql-subscriptions';
 import { User } from 'src/user/user.type';
+import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 
 @Resolver()
 export class ChatroomResolver {
@@ -76,10 +77,33 @@ export class ChatroomResolver {
             @Context() context: {req: Request}
         ) {
             const user = await this.userService.getUser(context.req.user.sub)
-            await this.pubSub.publish(`userStartedTyping.${chatroomId}`, {
+            await this.pubSub.publish(`userStoppedTyping.${chatroomId}`, {
                 user,
                 typingUserId: user.id
             })
+        }
+
+        @Mutation(() => Message)
+        async sendMessage(
+            @Args("chatroomId") chatroomId: number,
+            @Args("content") message: string,
+            @Context() context: {req: Request},
+            @Args("image", {type: GraphQLUpload, nullable: true}) image?: GraphQLUpload
+        ) {
+            let imagePath = null;
+
+            if(image) imagePath = await this.chatroomService.saveImage(image)
+            const newMessage = await this.chatroomService.sendMessage(
+                context.req.user.sub,
+                message,
+                chatroomId,
+                imagePath
+            )
+            await this.pubSub.publish(`newMessage.${chatroomId}`, {
+                newMessage
+            }).then((val) => console.log(val)).catch((e) => console.log(e));
+
+            return newMessage;
         }
 
         @UseFilters(GraphQLErrorFilter)
