@@ -12,6 +12,7 @@ import { min } from 'class-validator';
 import { TokenService } from './token/token.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ChatroomModule } from './chatroom/chatroom.module';
+import { LiveChatroomModule } from './live-chatroom/live-chatroom.module';
 
 const pubsub = new RedisPubSub({
   connection: {
@@ -63,7 +64,8 @@ const pubsub = new RedisPubSub({
     ConfigModule.forRoot({
       isGlobal: true
     }),
-    ChatroomModule
+    ChatroomModule,
+    LiveChatroomModule
   ],
   controllers: [AppController],
   providers: [AppService, TokenService],

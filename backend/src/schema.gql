@@ -43,7 +43,7 @@ type Mutation {
   logout: String!
   refreshToken: String!
   register(registerInput: RegisterDto!): RegisterResponse!
-  sendMessage(chatroomId: Float!, content: String!): Message!
+  sendMessage(chatroomId: Float!, content: String!, image: Upload): Message!
   updateUserProfile(avatarFile: Upload, fullname: String!): User!
   userStartedTypingMutation(chatroomId: Float!): User!
   userStoppedTypingMutation(chatroomId: Float!): User!

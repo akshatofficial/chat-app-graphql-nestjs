@@ -59,6 +59,8 @@ export class ChatroomResolver {
             return this.pubSub.asyncIterator(`userStoppedTyping.${chatroomId}`)
         }
 
+        @UseFilters(GraphQLErrorFilter)
+        @UseGuards(GraphqlAuthGuard)
         @Mutation(() => User)
         async userStartedTypingMutation(
             @Args("chatroomId") chatroomId: number,
@@ -69,9 +71,12 @@ export class ChatroomResolver {
                 user,
                 typingUserId: user.id
             })
+            return user
         }
 
-        @Mutation(() => User)
+        @UseFilters(GraphQLErrorFilter)
+        @UseGuards(GraphqlAuthGuard)
+        @Mutation(() => User, {})
         async userStoppedTypingMutation(
             @Args("chatroomId") chatroomId: number,
             @Context() context: {req: Request}
@@ -81,21 +86,24 @@ export class ChatroomResolver {
                 user,
                 typingUserId: user.id
             })
+            return user
         }
 
+
+        @UseGuards(GraphqlAuthGuard)
         @Mutation(() => Message)
         async sendMessage(
             @Args("chatroomId") chatroomId: number,
-            @Args("content") message: string,
+            @Args("content") content: string,
             @Context() context: {req: Request},
-            @Args("image", {type: GraphQLUpload, nullable: true}) image?: GraphQLUpload
+            @Args("image", {type: () => GraphQLUpload, nullable: true}) image?: GraphQLUpload
         ) {
             let imagePath = null;
 
             if(image) imagePath = await this.chatroomService.saveImage(image)
             const newMessage = await this.chatroomService.sendMessage(
                 context.req.user.sub,
-                message,
+                content,
                 chatroomId,
                 imagePath
             )
